@@ -2,9 +2,12 @@ from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import os
+from Routes.Routes import my
 
 app = Flask(__name__)
 CORS(app)
+
+app.register_blueprint(my)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///data.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -25,6 +28,7 @@ class Product(db.Model):
 @app.route('/')
 def home():
     return jsonify({"message": "Backend funcionando correctamente"})
+  
 
 @app.route('/products')
 def get_products():
@@ -34,4 +38,4 @@ def get_products():
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
